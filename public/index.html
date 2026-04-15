@@ -639,7 +639,7 @@
     reader.readAsDataURL(file);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const btn = document.getElementById('submit-btn');
     const toast = document.getElementById('toast');
@@ -647,16 +647,31 @@
     btn.disabled = true;
     btn.textContent = 'Sending…';
 
-    // Simulate send — replace with a real service like Formspree
-    setTimeout(() => {
+    const body = {
+      name:    document.getElementById('fname').value,
+      email:   document.getElementById('email').value,
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value,
+    };
+
+    try {
+      const res = await fetch('/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error('Server error');
       document.getElementById('contact-form').reset();
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 5000);
+    } catch {
+      alert('Something went wrong — please try again.');
+    } finally {
       btn.disabled = false;
       btn.innerHTML = `
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         Send message`;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 5000);
-    }, 900);
+    }
   }
 </script>
 
