@@ -8,7 +8,9 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.14",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
